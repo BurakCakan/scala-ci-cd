@@ -9,18 +9,22 @@ on:
 jobs:
 #  run_if:
 #    if: startsWith(github.ref_name, 'feature/')
-  test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Setup JDK 8
+      - name: Setup JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
-          distribution: 'oracle'
+          java-version: 1.8
 
-      - name: Build
-        run: mvn --batch-mode -DskipTests package
+      - name: Build and Test
+        run: |
+          mvn clean compile test
 
+      - name: Run Scalafmt
+        run: |
+          mvn scalafmt:check
