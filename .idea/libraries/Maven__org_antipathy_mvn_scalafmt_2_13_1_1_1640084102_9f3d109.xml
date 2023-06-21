@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.antipathy:mvn-scalafmt_2.13:1.1.1640084102.9f3d109">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/antipathy/mvn-scalafmt_2.13/1.1.1640084102.9f3d109/mvn-scalafmt_2.13-1.1.1640084102.9f3d109.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/antipathy/mvn-scalafmt_2.13/1.1.1640084102.9f3d109/mvn-scalafmt_2.13-1.1.1640084102.9f3d109-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/antipathy/mvn-scalafmt_2.13/1.1.1640084102.9f3d109/mvn-scalafmt_2.13-1.1.1640084102.9f3d109-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
