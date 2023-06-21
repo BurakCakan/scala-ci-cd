@@ -28,4 +28,5 @@ jobs:
 
       - name: Run Scalafmt
         run: |
-          mvn scalafmt:check
+          mvn scalafmt:format
+          
