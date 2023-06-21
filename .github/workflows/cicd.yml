@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - '*'
+  pull:
+    branches:
+      - '*'
 
 jobs:
 #  run_if:
