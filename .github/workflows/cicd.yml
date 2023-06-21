@@ -29,4 +29,12 @@ jobs:
       - name: Run Scalafmt
         run: |
           mvn scalafmt:format
+
+      - name: Check branch name
+        run: |
+          branch_name=$(echo "${GITHUB_REF#refs/heads/}")
+          if [[ ! "$branch_name" =~ ^(feature/|fix/) ]]; then
+            echo "Branch name should start with 'feature/' or 'fix/'."
+            exit 1
+          fi
           
