@@ -33,9 +33,10 @@ jobs:
           mvn scalafmt:format
 
       - name: Check branch name
+        shell: bash
         run: |
-          branch_name=$(echo "${GITHUB_REF#refs/heads/}")
-          if [[ ! "$branch_name" =~ ^(feature/|fix/) ]]; then
+          branch_name=$(echo "${{ github.ref }}")
+          if [[ ! "$branch_name" =~ ^(refs/heads/feature/|refs/heads/fix/) ]]; then
             echo "Branch name should start with 'feature/' or 'fix/'."
             exit 1
           fi
