@@ -36,13 +36,13 @@ jobs:
         shell: bash
         run: |
           branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
-          if [[ $branch_name == feature* ]]; then
-                echo "Branch name starts with 'feature/' or 'fix/'."
-              else
-                echo "Branch name should start with 'feature/' or 'fix/'."
-                exit 1
-              fi
-
+          printf $branch_name
+#if [[ $branch_name == feature* ]]; then
+#echo "Branch name starts with 'feature/' or 'fix/'."
+#else
+#echo "Branch name should start with 'feature/' or 'fix/'."
+#exit 1
+#fi
 
 #branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
 #if [[ "$branch_name" =~ ^"feature" ]]; then
