@@ -3,8 +3,10 @@ name: Scala CI
 on:
   push:
     branches:
-      - master
-      - develop
+      - '*'
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
 #  run_if:
@@ -31,10 +33,21 @@ jobs:
           mvn scalafmt:format
 
       - name: Check branch name
+        shell: bash
         run: |
-          branch_name=$(echo "${GITHUB_REF#refs/heads/}")
-          if [[ ! "$branch_name" =~ ^(feature/|fix/) ]]; then
-            echo "Branch name should start with 'feature/' or 'fix/'."
-            exit 1
-          fi
-          
+          branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
+          printf $branch_name
+#if [[ $branch_name == feature* ]]; then
+#echo "Branch name starts with 'feature/' or 'fix/'."
+#else
+#echo "Branch name should start with 'feature/' or 'fix/'."
+#exit 1
+#fi
+
+#branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
+#if [[ "$branch_name" =~ ^"feature" ]]; then
+#echo "Branch name starts with 'feature/' or 'fix/'."
+#else
+#echo "Branch name should start with 'feature/' or 'fix/'."
+#exit 1
+#fi

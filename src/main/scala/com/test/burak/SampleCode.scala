@@ -41,7 +41,7 @@ object SampleCode extends SampleCodeTrait {
   }
 
   /**
-    * Exercise 3
+    * Calculates number if changes
     */
   def countChange(money: Int, coins: List[Int]): Int = {
     def loop(money: Int, coins: List[Int]): Int = {
