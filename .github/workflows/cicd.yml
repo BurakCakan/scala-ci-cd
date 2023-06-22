@@ -37,13 +37,21 @@ jobs:
         run: |
           branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
           printf $branch_name
-          
+
+      - name: tailor
+        shell: bash
+        run: |
+          ls -l
+          cd ./ci-cd/
+          ls -l
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact-name
           path: ./ci-cd/
+
+
 
 
 #if [[ $branch_name == feature* ]]; then
