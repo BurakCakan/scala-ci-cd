@@ -38,8 +38,6 @@ jobs:
           branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
           printf $branch_name
 
-
-
 #      - name: tailor
 #        shell: bash
 #        run: |
