@@ -9,6 +9,8 @@ on:
       - '*'
 
 jobs:
+#  run_if:
+#    if: startsWith(github.ref_name, 'feature/')
   build:
     runs-on: ubuntu-latest
 

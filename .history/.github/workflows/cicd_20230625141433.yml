@@ -9,6 +9,8 @@ on:
       - '*'
 
 jobs:
+#  run_if:
+#    if: startsWith(github.ref_name, 'feature/')
   build:
     runs-on: ubuntu-latest
 
@@ -33,7 +35,7 @@ jobs:
       - name: Check branch name
         shell: bash
         run: |
-          branch_name=$(echo "${GITHUB_REF#refs/heads/}")
+          branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
           printf $branch_name
           if [[ $branch_name == feature/* ]] || [[ $branch_name == fix/* ]]; then
           echo "Branch name starts with 'feature/' or 'fix/'."
