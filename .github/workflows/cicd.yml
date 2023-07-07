@@ -36,19 +36,23 @@ jobs:
         shell: bash
         run: |
           branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
-          
+          event_name=$(echo "${{ github.event_name }}")
           printf $branch_name
-          printf "dot"
+          printf $event_name
           if [[ $branch_name == feature/* ]] || [[ $branch_name == fix/* ]]; then
           echo "Branch name starts with 'feature/' or 'fix/'."
           else
           echo "Branch name should start with 'feature/' or 'fix/'."
           exit 1
           fi
+          if [[ "${{ github.event_name }}" != 'pull_request' ]]; then
+          echo "Skipping branch name check for merge operation."
+          exit 0
+          fi
 
+ ## if [[ "${{ github.event_name }}" != 'pull_request' ]]
 
-
-#          branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
+#           if [[ $branch_name == feature/* ]] || [[ $branch_name == fix/* ]]; then
 
 #if [[ $branch_name == feature* ]]; then
 #echo "Branch name starts with 'feature/' or 'fix/'."
