@@ -39,16 +39,17 @@ jobs:
           event_name=$(echo "${{ github.event_name }}")
           printf $branch_name
           printf $event_name
-          if [[ $branch_name == feature/* ]] || [[ $branch_name == fix/* ]]; then
+          if [[ "${{ github.event_name }}" == 'pull_request' ]] && [[ $branch_name == feature/* || $branch_name == fix/* ]]; then
           echo "Branch name starts with 'feature/' or 'fix/'."
+          elif [[ "${{ github.event_name }}" != 'pull_request' ]]; then
+          echo "Skipping branch name check for merge operation."
+          exit 0
           else
           echo "Branch name should start with 'feature/' or 'fix/'."
           exit 1
           fi
-          if [[ "${{ github.event_name }}" != 'pull_request' ]]; then
-          echo "Skipping branch name check for merge operation."
-          exit 0
-          fi
+          
+          
 
  ## if [[ "${{ github.event_name }}" != 'pull_request' ]]
 
