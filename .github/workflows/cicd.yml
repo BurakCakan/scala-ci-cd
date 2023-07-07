@@ -51,8 +51,18 @@ jobs:
           echo "Branch name should start with 'feature/' or 'fix/'."
           exit 1
           fi
-          
-          
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: dhrj-artifact
+
+      - name: Build Tar File
+        run: tar -czvf dhrj.tar.gz dhrj.jar
 
 
 #
