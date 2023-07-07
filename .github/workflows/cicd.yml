@@ -35,7 +35,7 @@ jobs:
       - name: Check branch name
         shell: bash
         run: |
-          branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
+          branch_name=$(echo "${GITHUB_REF##*/}")
           printf $branch_name
           if [[ $branch_name == feature/* ]] || [[ $branch_name == fix/* ]]; then
           echo "Branch name starts with 'feature/' or 'fix/'."
@@ -45,6 +45,8 @@ jobs:
           fi
 
 
+
+#          branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
 
 #if [[ $branch_name == feature* ]]; then
 #echo "Branch name starts with 'feature/' or 'fix/'."
