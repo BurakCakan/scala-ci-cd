@@ -56,15 +56,16 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: runartifact
-          path: target/dhrj.jar
+          path: target/
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: runartifact
 
-      - name: Build Tar File
-        run: tar -czvf dhrj.tar.gz dhrj.jar
+#      - name: Download Artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: runartifact
+
+#      - name: Build Tar File
+#        run: tar -czvf dhrj.tar.gz dhrj.jar
 
 
 #
