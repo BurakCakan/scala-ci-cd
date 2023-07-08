@@ -68,7 +68,7 @@ jobs:
         run: ls -la target
 
       - name: Build Tar File
-        run: tar -czvf dhrj.tar.gz dhrj.zip
+        run: tar -czvf dhrj.tar.gz *
 
 
 #
