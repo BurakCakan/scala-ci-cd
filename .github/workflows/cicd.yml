@@ -24,20 +24,6 @@ jobs:
           java-version: 11
           distribution: 'adopt'
 
-      - name: Run Scalafmt
-        run: |
-          mvn scalafmt:format
-
-      - name: Build and Test
-        run: |
-          mvn clean compile test
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: dhrj-artifact
-          path: target/dhrj.jar
-
       - name: Check branch name
         shell: bash
         run: |
@@ -52,10 +38,24 @@ jobs:
           exit 1
           fi
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
+      - name: Run Scalafmt
+        run: |
+          mvn scalafmt:format
+
+      - name: Build and Test
+        run: |
+          mvn clean compile test
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: dhrj-artifact
+          name: runartifact
+          path: target/dhrj.jar
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: runartifact
 
       - name: Build Tar File
         run: tar -czvf dhrj.tar.gz dhrj.jar
