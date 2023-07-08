@@ -67,8 +67,33 @@ jobs:
       - name: List target directory
         run: ls -la target
 
-      - name: Build Tar File
-        run: tar -czvf dhrj.tar.gz *
+      - name: Build Tarball
+        shell: bash
+        run: |
+          GIT_SHORT_SHA=$(echo ${{github.sha}} | cut -c 1-7)
+          BUILD_NUMBER=${{github.run_number}}
+          echo "setting up path"
+          pwd
+          ls -lrt |head -10
+          echo "Build number is $BUILD_NUMBER" > deploy.info
+          echo "Git commit is $GIT_SHORT_SHA" >> deploy.info
+          
+          echo "creating tarball dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz"
+          ls -lrt |head -10
+          tar czf dhri-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
+          tar -tf dhri-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
+
+      - name: List target directory
+        run: ls -la target
+
+      - name: List full directory
+        run: ls -la
+
+  #    - name: Build Tar File
+  #      run: tar -czvf dhrj.tar.gz *
+
+# ${{github.run_number}} --> bamboo build number
+#
 
 
 #
