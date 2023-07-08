@@ -49,23 +49,26 @@ jobs:
       - name: List target directory
         run: ls -la target
 
-      - name: List directory
-        run: ls -la
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: runartifact
+          name: dhrj
           path: target/
 
+      - name: List target directory
+        run: ls -la target
 
-#      - name: Download Artifact
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: runartifact
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dhrj
+
+      - name: List target directory
+        run: ls -la target
 
 #      - name: Build Tar File
-#        run: tar -czvf dhrj.tar.gz dhrj.jar
+#        run: tar -czvf dhrj.tar.gz dhrj.zip
 
 
 #
