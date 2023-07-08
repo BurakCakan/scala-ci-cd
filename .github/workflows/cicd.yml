@@ -46,6 +46,12 @@ jobs:
         run: |
           mvn clean compile test
 
+      - name: List target directory
+        run: ls -la target
+
+      - name: List directory
+        run: ls -la
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
