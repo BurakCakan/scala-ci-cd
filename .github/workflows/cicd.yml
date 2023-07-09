@@ -44,6 +44,9 @@ jobs:
           java-version: 11
           distribution: 'adopt'
 
+      - name: Linter
+        run: mvn scalafmt:format
+
       - name: Build and Test
         run: |
           mvn clean compile test
@@ -53,14 +56,6 @@ jobs:
         with:
           name: dhrj
           path: target/
-
-  linter:
-
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Scalafmt
-        run: mvn scalafmt:format
 
   deploy:
 
@@ -73,9 +68,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dhrj
-
-#      - name: List target directory
-#        run: ls -la target
 
       - name: Build Tarball
         shell: bash
@@ -92,9 +84,6 @@ jobs:
           ls -lrt |head -10
           tar czf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
           tar -tf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
-
-      - name: List target directory
-        run: ls -la target
 
       - name: List full directory
         run: ls -la
