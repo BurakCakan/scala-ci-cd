@@ -114,14 +114,22 @@ jobs:
 
 # Open these lines after sending credentials for XL Deploy:
 
-      - name: Set up XL Deploy
-        uses: xebialabs/xld-github-action@v1
-        with:
-          xl-deploy-url: ${{ secrets.XL_DEPLOY_URL }}
-          xl-deploy-username: ${{ secrets.XL_DEPLOY_USERNAME }}
-          xl-deploy-password: ${{ secrets.XL_DEPLOY_PASSWORD }}
+  #    - name: Set up XL Deploy
+  #      uses: xebialabs/xld-github-action@v1
+  #      with:
+  #        xl-deploy-url: ${{ secrets.XL_DEPLOY_URL }}
+  #        xl-deploy-username: ${{ secrets.XL_DEPLOY_USERNAME }}
+  #        xl-deploy-password: ${{ secrets.XL_DEPLOY_PASSWORD }}
 
   #    - name: Upload DAX file to XL Deploy
   #      run: |
   #        xl apply -f **/*.dar
 
+
+  #API Request way for XL Deploy:
+
+    #  - name: Deploy to XL Deploy
+    #    run: |
+    #      # Make API requests to XL Deploy using curl, wget, or an HTTP client library.
+    #      # Example:
+    #      curl -X POST -u ${{ secrets.XL_DEPLOY_USERNAME }}:${{ secrets.XL_DEPLOY_PASSWORD }} -F "file=@path/to/your/dax/file.dax" https://xldeploy.example.com/deploy(maybe: ${{ secrets.XL_DEPLOY_URL }} )
