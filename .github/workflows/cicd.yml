@@ -80,14 +80,42 @@ jobs:
           
           echo "creating tarball dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz"
           ls -lrt |head -10
-          tar czf dhri-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
-          tar -tf dhri-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
+          tar czf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
+          tar -tf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
 
       - name: List target directory
         run: ls -la target
 
       - name: List full directory
         run: ls -la
+
+      - name: Creating DAR package
+        shell: bash
+        run: |
+          GIT_SHORT_SHA=$(echo ${{github.sha}} | cut -c 1-7)
+          BUILD_NUMBER=${{github.run_number}}
+          pwd
+          mkdir dataAvailabilityveritas_dax
+  
+          mv dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz dataAvailabilityveritas_dax/
+  
+          echo "Creating deployit-manifest.xml"
+          cat > deployit-manifest.xml <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <udm.DeploymentPackage version="${BUILD_NUMBER}" application="dataAvailabilityveritas_dax">
+            <deployables>
+              <dax.Package name="dataAvailabilityveritas_dax" file="dataAvailabilityveritas_dax/dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz">
+                <targetDir>/app/emav/datahub/ACC/burak/artifacts</targetDir>
+              </dax.Package>
+            </deployables>
+          </udm.DeploymentPackage>
+          EOF
+          cat deployit-manifest.xml
+          echo "creating DAR package"
+          zip -r dhrj-v${BUILD_NUMBER}.dar deployit-manifest.xml dataAvailabilityveritas_dax
+  
+          echo "listing files"
+          ls -lrt .
 
   #    - name: Build Tar File
   #      run: tar -czvf dhrj.tar.gz *
