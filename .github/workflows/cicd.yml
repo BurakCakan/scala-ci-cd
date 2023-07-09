@@ -11,8 +11,28 @@ on:
 jobs:
 #  run_if:
 #    if: startsWith(github.ref_name, 'feature/')
+
+
+  branch-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        shell: bash
+        run: |
+          branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
+          if [[ "${{ github.event_name }}" == 'pull_request' ]] && [[ $branch_name == feature/* || $branch_name == fix/* ]]; then
+          echo "Branch name starts with 'feature/' or 'fix/'."
+          elif [[ "${{ github.event_name }}" != 'pull_request' ]]; then
+          echo "Skipping branch name check for merge operation."
+          exit 0
+          else
+          echo "Branch name should start with 'feature/' or 'fix/'."
+          exit 1
+          fi
+
   build:
     runs-on: ubuntu-latest
+
 
     steps:
       - name: Checkout Code
@@ -24,51 +44,83 @@ jobs:
           java-version: 11
           distribution: 'adopt'
 
+      - name: Linter
+        run: mvn scalafmt:format
+
       - name: Build and Test
         run: |
           mvn clean compile test
 
-      - name: Run Scalafmt
-        run: |
-          mvn scalafmt:format
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dhrj
+          path: target/
 
-      - name: Check branch name
+  deploy:
+
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dhrj
+
+      - name: Build Tarball
         shell: bash
         run: |
-          branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
-          event_name=$(echo "${{ github.event_name }}")
-          printf $branch_name
-          printf $event_name
-          if [[ "${{ github.event_name }}" == 'pull_request' ]] && [[ $branch_name == feature/* || $branch_name == fix/* ]]; then
-          echo "Branch name starts with 'feature/' or 'fix/'."
-          elif [[ "${{ github.event_name }}" != 'pull_request' ]]; then
-          echo "Skipping branch name check for merge operation."
-          exit 0
-          else
-          echo "Branch name should start with 'feature/' or 'fix/'."
-          exit 1
-          fi
+          GIT_SHORT_SHA=$(echo ${{github.sha}} | cut -c 1-7)
+          BUILD_NUMBER=${{github.run_number}}
+          echo "setting up path"
+          pwd
+          ls -lrt |head -10
+          echo "Build number is $BUILD_NUMBER" > deploy.info
+          echo "Git commit is $GIT_SHORT_SHA" >> deploy.info
           
-          
+          echo "creating tarball dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz"
+          ls -lrt |head -10
+          tar czf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
+          tar -tf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
 
- ## if [[ "${{ github.event_name }}" != 'pull_request' ]]
+      - name: List full directory
+        run: ls -la
 
-#           if [[ $branch_name == feature/* ]] || [[ $branch_name == fix/* ]]; then
+      - name: Creating DAR package
+        shell: bash
+        run: |
+          GIT_SHORT_SHA=$(echo ${{github.sha}} | cut -c 1-7)
+          BUILD_NUMBER=${{github.run_number}}
+          pwd
+          mkdir dataAvailabilityveritas_dax
+  
+          mv dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz dataAvailabilityveritas_dax/
+  
+          echo "Creating deployit-manifest.xml"
+          cat > deployit-manifest.xml <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <udm.DeploymentPackage version="${BUILD_NUMBER}" application="dataAvailabilityveritas_dax">
+            <deployables>
+              <dax.Package name="dataAvailabilityveritas_dax" file="dataAvailabilityveritas_dax/dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz">
+                <targetDir>/app/emav/datahub/ACC/burak/artifacts</targetDir>
+              </dax.Package>
+            </deployables>
+          </udm.DeploymentPackage>
+          EOF
+          cat deployit-manifest.xml
+          echo "creating DAR package"
+          zip -r dhrj-v${BUILD_NUMBER}.dar deployit-manifest.xml dataAvailabilityveritas_dax
+  
+          echo "listing files"
+          ls -lrt .
 
-#if [[ $branch_name == feature* ]]; then
-#echo "Branch name starts with 'feature/' or 'fix/'."
-#else
-#echo "Branch name should start with 'feature/' or 'fix/'."
-#exit 1
-#fi
+  #    - name: Build Tar File
+  #      run: tar -czvf dhrj.tar.gz *
 
-#branch_name=$(echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
-#if [[ "$branch_name" =~ ^"feature" ]]; then
-#echo "Branch name starts with 'feature/' or 'fix/'."
-#else
-#echo "Branch name should start with 'feature/' or 'fix/'."
-#exit 1
-#fi
+# ${{github.run_number}} --> bamboo build number
+#
 
 
 #
