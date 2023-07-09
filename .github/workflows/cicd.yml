@@ -11,19 +11,11 @@ on:
 jobs:
 #  run_if:
 #    if: startsWith(github.ref_name, 'feature/')
-  build:
+
+
+  branch-check:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: 11
-          distribution: 'adopt'
-
       - name: Check branch name
         shell: bash
         run: |
@@ -38,16 +30,28 @@ jobs:
           exit 1
           fi
 
+  linter:
+    runs-on: ubuntu-latest
+    steps:
       - name: Run Scalafmt
-        run: |
-          mvn scalafmt:format
+        run: mvn scalafmt:format
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
 
       - name: Build and Test
         run: |
           mvn clean compile test
-
-      - name: List target directory
-        run: ls -la target
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -55,9 +59,12 @@ jobs:
           name: dhrj
           path: target/
 
-      - name: List target directory
-        run: ls -la target
+  deploy:
 
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
 
       - name: Download Artifact
         uses: actions/download-artifact@v3
@@ -82,12 +89,6 @@ jobs:
           ls -lrt |head -10
           tar czf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
           tar -tf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
-
-      - name: List target directory
-        run: ls -la target
-
-      - name: List full directory
-        run: ls -la
 
       - name: Creating DAR package
         shell: bash
