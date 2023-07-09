@@ -30,14 +30,9 @@ jobs:
           exit 1
           fi
 
-  linter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Scalafmt
-        run: mvn scalafmt:format
-
   build:
     runs-on: ubuntu-latest
+
 
     steps:
       - name: Checkout Code
@@ -59,6 +54,14 @@ jobs:
           name: dhrj
           path: target/
 
+  linter:
+
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Scalafmt
+        run: mvn scalafmt:format
+
   deploy:
 
     needs: build
@@ -71,8 +74,8 @@ jobs:
         with:
           name: dhrj
 
-      - name: List target directory
-        run: ls -la target
+#      - name: List target directory
+#        run: ls -la target
 
       - name: Build Tarball
         shell: bash
@@ -89,6 +92,12 @@ jobs:
           ls -lrt |head -10
           tar czf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz *
           tar -tf dhrj-${GIT_SHORT_SHA}-bn${BUILD_NUMBER}.tar.gz
+
+      - name: List target directory
+        run: ls -la target
+
+      - name: List full directory
+        run: ls -la
 
       - name: Creating DAR package
         shell: bash
