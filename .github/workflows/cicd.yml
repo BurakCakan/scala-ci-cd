@@ -114,12 +114,12 @@ jobs:
 
 # Open these lines after sending credentials for XL Deploy:
 
-  #    - name: Set up XL Deploy
-  #      uses: xebialabs/xld-github-action@v1
-  #      with:
-  #        xl-deploy-url: ${{ secrets.XL_DEPLOY_URL }}
-  #        xl-deploy-username: ${{ secrets.XL_DEPLOY_USERNAME }}
-  #        xl-deploy-password: ${{ secrets.XL_DEPLOY_PASSWORD }}
+      - name: Set up XL Deploy
+        uses: xebialabs/xld-github-action@v1
+        with:
+          xl-deploy-url: ${{ secrets.XL_DEPLOY_URL }}
+          xl-deploy-username: ${{ secrets.XL_DEPLOY_USERNAME }}
+          xl-deploy-password: ${{ secrets.XL_DEPLOY_PASSWORD }}
 
   #    - name: Upload DAX file to XL Deploy
   #      run: |
