@@ -58,6 +58,10 @@ jobs:
           name: Test Report
           path: target/
 
+      - name: target file
+        uses: bash
+        run: ls -l ./target/
+
 #added for trial:
   #    - name: Publish Test Results
   #      uses: EnricoMi/publish-unit-test-result-action@v2
