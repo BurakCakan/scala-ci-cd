@@ -59,7 +59,7 @@ jobs:
           path: target/
 
       - name: target file
-        uses: bash
+        shell: bash
         run: ls -l ./target/
 
 #added for trial:
