@@ -21,6 +21,7 @@ jobs:
         shell: bash
         run: |
           branch_name=$(echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}")
+          printf branch_name
           if [[ "${{ github.event_name }}" == 'pull_request' ]] && [[ $branch_name == feature/* || $branch_name == fix/* ]]; then
           echo "Branch name starts with 'feature/' or 'fix/'."
           elif [[ "${{ github.event_name }}" != 'pull_request' ]]; then
