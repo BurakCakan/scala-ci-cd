@@ -7,6 +7,10 @@ on:
   pull_request:
     branches:
       - '*'
+      -
+permissions:
+  checks: write
+  pull-requests: write
 
 jobs:
 
@@ -46,6 +50,27 @@ jobs:
       - name: Build and Test
         run: |
           mvn clean compile test
+          mvn surefire-report:report
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Report
+          path: target/
+
+      - name: target file
+        shell: bash
+        run: ls -l ./target/
+
+#added for trial:
+  #    - name: Publish Test Results
+  #      uses: EnricoMi/publish-unit-test-result-action@v2
+  #      if: always()
+  #      with:
+  #        files: |
+  #          test-results/**/*.xml
+  #          test-results/**/*.trx
+  #          test-results/**/*.json
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -130,6 +155,4 @@ jobs:
 
     #  - name: Deploy to XL Deploy
     #    run: |
-    #      # Make API requests to XL Deploy using curl, wget, or an HTTP client library.
-    #      # Example:
     #      curl -X POST -u ${{ secrets.XL_DEPLOY_USERNAME }}:${{ secrets.XL_DEPLOY_PASSWORD }} -F "file=@path/to/your/dax/file.dax" https://xldeploy.example.com/deploy(maybe: ${{ secrets.XL_DEPLOY_URL }} )
