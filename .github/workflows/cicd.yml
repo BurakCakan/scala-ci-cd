@@ -47,6 +47,16 @@ jobs:
         run: |
           mvn clean compile test
 
+#added for trial:
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            test-results/**/*.xml
+            test-results/**/*.trx
+            test-results/**/*.json
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -130,6 +140,4 @@ jobs:
 
     #  - name: Deploy to XL Deploy
     #    run: |
-    #      # Make API requests to XL Deploy using curl, wget, or an HTTP client library.
-    #      # Example:
     #      curl -X POST -u ${{ secrets.XL_DEPLOY_USERNAME }}:${{ secrets.XL_DEPLOY_PASSWORD }} -F "file=@path/to/your/dax/file.dax" https://xldeploy.example.com/deploy(maybe: ${{ secrets.XL_DEPLOY_URL }} )
