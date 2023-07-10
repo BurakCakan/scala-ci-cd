@@ -50,16 +50,23 @@ jobs:
       - name: Build and Test
         run: |
           mvn clean compile test
+          mvn surefire-report:report
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Report
+          path: target/
 
 #added for trial:
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
+  #    - name: Publish Test Results
+  #      uses: EnricoMi/publish-unit-test-result-action@v2
+  #      if: always()
+  #      with:
+  #        files: |
+  #          test-results/**/*.xml
+  #          test-results/**/*.trx
+  #          test-results/**/*.json
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
